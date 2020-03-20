@@ -1,0 +1,168 @@
+.new-waybill,.edit-waybill{
+  // 表头固定滚动
+  .el-table__body-wrapper{
+    max-height: 350px!important;
+    overflow-y: auto;
+  }
+  .receiveNameLeft{
+    .customerNameCol{
+      background: #66ccff;
+    }
+  }
+  .receivePhoneLeft{
+    .customerPhoneCol{
+      background: #66ccff;
+    }
+  }
+  .card_main{
+    padding: 30px 40px;
+  }
+  .public_card .card_main {
+    margin: 0!important;
+  }
+  .redLabel{
+    label{
+      color: #f00;
+    }
+  }
+  .el-form-item{
+    width: 100%;
+    display: flex!important;
+    flex-direction: row;
+    position: relative;
+    .positionDiv{
+      display: flex;
+      flex: 1;
+      width: 200%;
+      position: absolute;
+      top: 40px;
+      z-index: 10;
+      background: #ccc;
+    }
+    .tableDivLeft{
+      left: 0px;
+    }
+    .tableDivRight{
+      right: -4%;
+    }
+    .tableDivRightLast{
+      right: 4%;
+    }
+    .el-form-item__content{
+      display: flex;
+      flex: 1;
+      .el-input__inner{
+        width: 100%;
+        border: none;
+      }
+    }
+  }
+  .el-table__empty-block{
+    min-height: 80px;
+    .el-table__empty-text{
+      margin-top: 0px;
+    }
+    .el-table__empty-text:after{
+      display: none;
+    }
+  }
+  .el-radio-group{
+    display: flex;
+    align-items: center;
+  }
+  .el-tab-pane{
+    overflow-y: auto;
+  }
+  .cargo-con{
+    .el-table--enable-row-hover .el-table__body tr:hover > td{
+      background-color: #fff;
+    }
+    .el-table__body tr.current-row > td{
+      background-color: #fff!important;
+    }
+    .el-table_1_column_4{
+      padding: 0 5px;
+    }
+  }
+  .hr-line{
+    width: 100%;
+    height: 3px;
+    background: #f0f2fa;
+  }
+  .cargo-con{
+    .el-table thead{
+      background: #fff;
+    }
+    .el-table th{
+      background: #fff;
+    }
+    .el-table{
+      display: block;
+      height: 134px;
+      flex: none;
+    }
+  }
+  .yellowColor{
+    color: #ffb856;
+  }
+  .el-input-group__append, .el-input-group__prepend{
+    background-color: #fff;
+    border: none;
+    color: #333;
+  }
+  .account-col{
+    .el-input{
+      width: 60%;
+    }
+  }
+  .el-input-number__increase, .el-input-number__decrease{
+    height: 29px;
+    line-height: 29px;
+    margin-top: 2px;
+    top: 3px;
+    width: 35px;
+  }
+  .el-textarea .el-textarea__inner{
+    -height: 80px;
+  }
+  .el-input-number{
+    width: 100%;
+  }
+  .addressCol{
+    padding-right: 10px;
+  }
+  .routeSelect{
+    .el-select{
+      width: 400px;
+    }
+  }
+  .notPerfect{
+    input::input-placeholder{color:  #f00 ;} /* 有些资料显示需要写，有些显示不需要，但是在编辑器webstorm中该属性不被识别 */
+    ::-webkit-input-placeholder { /* WebKit browsers */
+    color: #f00;
+    }
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #f00;
+    }
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #f00;
+    }
+    :-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #f00;
+    }
+  }
+  .radioRow{
+    .el-form-item__content{
+      display: flex;
+      flex-direction: row!important;
+      align-items: center!important;
+      justify-content: flex-start!important;
+    }
+  }
+  .el-form-item__label{
+    width: 125px!important;
+  }
+  .el-radio-group{
+    margin-left: 10px;
+  }
+}

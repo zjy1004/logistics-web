@@ -1,0 +1,80 @@
+.new-waybill,.edit-waybill{
+  display: flex;
+  flex: 1;
+  .header-con{
+    background: #f0f2fa;
+    font-weight: bold;
+    height: 37px;
+    line-height: 37px;
+    font-size: 13px;
+    color: #333;
+    text-indent: 45px;
+  }
+  .el-form{
+    .el-row{
+      border-bottom: 1px solid #ebecf0;
+    }
+    .update-client-data {
+      width: 100%;
+      height: 44px;
+      line-height: 44px;
+      i {
+        font-size: 18px;
+        cursor: pointer;
+      }
+      span {
+        color: #ff0002;
+        font-size: 15px;
+        margin-left: 8px;
+      }
+    }
+    .lock-wrap {
+      width: 100%;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .lock {
+      width: 25px;
+      height: 25px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background: url('../../../../image/lock.png') no-repeat;
+      background-size: 100%;
+    }
+    .open-lock {
+      width: 25px;
+      height: 25px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      background: url('../../../../image/open_lock.png') no-repeat;
+      background-size: 100%;
+    }
+    .last-row{
+      border-bottom: none;
+    }
+  }
+  .cargo-con{
+    height: 133px;
+  }
+  .btns{
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 20px;
+    margin-right: 20px;
+    .radio-con{
+      margin-right: 40px;
+    }
+    .print-con{
+      margin-left: 15px;
+    }
+  }
+  .revoke{
+    margin-right: 25px;
+  }
+}
