@@ -496,13 +496,8 @@ export default {
         if (res.code === 200) {
           this.tableData = []
           this.waybillInfoData = []
-          let obj = {
-            name: '',
-            url: ''
-          }
-          res.data.attachInfoList.forEach(item => {
-            obj.url = item
-            this.fileList.push(obj)
+          res.data.attachInfoList.forEach((item, index) => {
+            this.fileList.push({name: index, url: item})
           })
           this.info = res.data
           if (res.data.settlementMethod === 1) {

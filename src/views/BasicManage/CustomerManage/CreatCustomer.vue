@@ -175,71 +175,69 @@
             </el-col>
           </el-row>
         </div>
-        <div v-if="this.$route.query.type !== 'add' && this.clientType === 2">
+        <div v-show="this.$route.query.type !== 'add'">
           <div class="card_form_title">
-          <span class="title_line"></span>
-          <span class="title">账号信息</span>
-        </div>
-        <el-form :inline="true" ref="newForm" :model="newForm" :rules="rules2" label-width="130px" :disabled="formDisabled">
-        <div class="creatCustomer_main">
-          <el-row v-if="this.$route.query.type === 'edit'">
-            <el-col :span="5" :offset="1">
-              <el-form-item label="登录账号:" prop="loginAccount">
-                <el-input class="longInput" :disabled="formDisabled" v-model="newForm.loginAccount" placeholder="请输入登录账号" maxlength="16" @keyup.native="loginAccountInput" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6" :offset="0">
-              <el-form-item label="" prop="">
-                <el-button @click="addRelevance('newForm')">添加关联</el-button>&emsp;
-                <el-button @click="newAndRelevance('newForm')">新建并关联</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="22" :offset="1">
-              <div class="costTable">
-                <el-table
-                  :data="accountTableData"
-                  style="width: 100%"
-                  stripe
-                  border>
-                  <el-table-column
-                    min-width="10%"
-                    prop="rowNum"
-                    label="序号">
-                  </el-table-column>
-                  <el-table-column
-                    min-width="20%"
-                    prop="loginAccount"
-                    label="登录账号">
-                    <template slot-scope="scope">
-                      <span>{{scope.row.loginAccount}}<i style="margin-left: 10px; color: #5677fc; font-size: 18px" v-if="!scope.row.closeDisabled" class="iconfont icon--zijinanquan"></i></span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    min-width="20%"
-                    prop="platformCode"
-                    label="客户编码">
-                  </el-table-column>
-                  <el-table-column
-                    v-if="this.$route.query.type === 'edit'"
-                    min-width="30%"
-                    label="操作">
-                    <template slot-scope="scope">
-                      <a href="javascript:;" type="text" size="small" @click="removeRelevance(scope.row.clientAccountId)">解除关联</a>
-                      <!-- <a href="javascript:;" type="text" size="small" @click="closeOnlinePay(scope.row)">关闭驮付宝</a> -->
-                      <el-button :disabled="scope.row.closeDisabled" type="text" @click="closeOnlinePay(scope.row)">关闭驮付宝</el-button>
-                      <el-button :disabled="scope.row.fundsAccountDisabled" type="text" @click="setFundsAccount(scope.row)">设置为资金帐号</el-button>
-                      <!-- <a class="enable" href="javascript:;" type="text" size="small" @click="enable(scope.row)">{{scope.row.clientStatus ? '启用': '禁用'}}</a>
-                      <a class="enable" href="javascript:;" type="text" size="small" @click="onlinePayChange(scope.row)">{{scope.row.onlinePaySwith ? '开通驮付宝': '关闭驮付宝'}}</a> -->
-                  </template>
-                  </el-table-column>
-                </el-table>
+            <span class="title_line"></span>
+            <span class="title">账号信息</span>
+          </div>
+          <el-form :inline="true" ref="newForm" :model="newForm" :rules="rules2" label-width="130px" :disabled="formDisabled">
+            <div class="creatCustomer_main">
+              <el-row v-if="this.$route.query.type === 'edit'">
+                <el-col :span="5" :offset="1">
+                  <el-form-item label="登录账号:" prop="loginAccount">
+                    <el-input class="longInput" :disabled="formDisabled" v-model="newForm.loginAccount" placeholder="请输入登录账号" maxlength="16" clearable></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6" :offset="0">
+                  <el-form-item label="" prop="">
+                    <el-button @click="addRelevance('newForm')">添加关联</el-button>&emsp;
+                    <el-button @click="newAndRelevance('newForm')">新建并关联</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="22" :offset="1">
+                  <div class="costTable">
+                    <el-table
+                      :data="accountTableData"
+                      style="width: 100%"
+                      stripe
+                      border>
+                      <el-table-column
+                        min-width="10%"
+                        prop="rowNum"
+                        label="序号">
+                      </el-table-column>
+                      <el-table-column
+                        min-width="20%"
+                        prop="loginAccount"
+                        label="登录账号">
+                        <template slot-scope="scope">
+                          <span>{{scope.row.loginAccount}}<i style="margin-left: 10px; color: #5677fc; font-size: 18px" v-if="!scope.row.closeDisabled" class="iconfont icon--zijinanquan"></i></span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        min-width="20%"
+                        prop="platformCode"
+                        label="客户编码">
+                      </el-table-column>
+                      <el-table-column
+                        v-if="this.$route.query.type === 'edit'"
+                        min-width="30%"
+                        label="操作">
+                        <template slot-scope="scope">
+                          <a href="javascript:;" type="text" size="small" @click="removeRelevance(scope.row.clientAccountId)">解除关联</a>
+                          <el-button :disabled="scope.row.closeDisabled" type="text" @click="closeOnlinePay(scope.row)">关闭驮付宝</el-button>
+                          <el-button :disabled="scope.row.fundsAccountDisabled" type="text" @click="setFundsAccount(scope.row)">设置为资金帐号</el-button>
+                          <a href="javascript:;" type="text" size="small" @click="resetPwd(scope.row)">重置密码</a>
+                      </template>
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                </el-col>
+              </el-row>
             </div>
-            </el-col>
-          </el-row>
-        </div>
-        </el-form>
+          </el-form>
         </div>
 
       </el-form>
@@ -327,7 +325,6 @@
 import CustomerManageAjax from '@/api/CustomerManage/CustomerManage'
 import VDialog from '@/components/Dialog/Dialog'
 import SiteManageAjax from '@/api/SiteManage/SiteManage'
-import LoginAjax from '@/api/Login/Login'
 
 export default {
   data () {
@@ -386,6 +383,7 @@ export default {
       closeParam: {},
       setParam: {},
       dialogVisible: false,
+      saveLoginAccount: '',
       saveUserId: '',
       id: '',
       clientType: '',
@@ -483,13 +481,15 @@ export default {
       this.disableBtn = false
     }
     let id = this.$route.query.id
-    this.clientType = this.$route.query.clientType
+    // let clientType = Number(this.$route.query.clientType)
+    // this.clientType = clientType
     if (id !== undefined && id !== '') {
       this.id = id
       this.updateInit(id)
-      if (this.clientType === 2) {
-        this.getRelevanceList(id)
-      }
+      this.getRelevanceList(id)
+      // if (this.clientType === 2) {
+      //   this.getRelevanceList(id)
+      // }
     } else {
       this.updateInit()
     }
@@ -498,6 +498,8 @@ export default {
       this.form.freightSettlementMethod = freightSettlementMethod[0].generateKey
     }
     this.settlementMethodOption = freightSettlementMethod
+  },
+  mounted () {
   },
   computed: {
     provinceCode () {
@@ -554,7 +556,7 @@ export default {
   methods: {
     clickSure (flag) { // 弹框确定
       if (flag === 'dialogVisible') {
-        this.resetPassword(this.saveUserId)
+        this.resetPwdAjax(this.saveLoginAccount)
         this.dialogVisible = false
       }
       if (flag === 'addRelevanceShow') {
@@ -635,6 +637,10 @@ export default {
         }
       })
     },
+    resetPwd (val) { // 重置密码
+      this.dialogVisible = true
+      this.saveLoginAccount = val.loginAccount
+    },
     closeOnlinePay (val) { // 关闭驮付宝
       this.closeParam = {
         clientId: this.id,
@@ -704,8 +710,8 @@ export default {
         }
       })
     },
-    resetPassword (id) { // 重置密码
-      LoginAjax.ResetPassword({userId: id}).then(response => {
+    resetPwdAjax (val) { // 重置密码
+      CustomerManageAjax.ResetPwd({account: val}).then(response => {
         if (response.code === 200) {
           this.$notify({
             message: '重置密码成功！',
@@ -734,10 +740,10 @@ export default {
     //   this.form.account = this.validateAccount(this.form.account)
     //   this.hasUserName = false
     // },
-    loginAccountInput () {
-      this.newForm.loginAccount = this.validateAccount(this.newForm.loginAccount)
-      this.hasUserName = false
-    },
+    // loginAccountInput () {
+    //   this.newForm.loginAccount = this.validateAccount(this.newForm.loginAccount)
+    //   this.hasUserName = false
+    // },
     inputPhone (evnet, value) {
       this.hasPhone = false
       this.form.phone = this.validateNum(this.form.phone)

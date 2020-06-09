@@ -6,6 +6,11 @@ const WaybillAjax = {
     let result = Get('/crm/client/waybill/all', params)
     return result
   },
+  QueryClient (params) {
+    // 获取客户信息模糊查询
+    let result = Get('/crm/client/waybill/fuzzy', params)
+    return result
+  },
   QueryWaybillAndShift (params) {
     // 通过客户id查询路线及班次
     let result = Get('/crm/line/waybill/shift/list', params)

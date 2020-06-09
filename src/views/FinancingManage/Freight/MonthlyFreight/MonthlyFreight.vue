@@ -15,13 +15,16 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="客户名称:" prop="clientName">
+              <!-- <el-form-item label="客户名称:" prop="clientName">
                 <search-by-name
                   ref="searchCustomerName"
                   :searchType="'all'"
                   :placeholderText="'请输入客户名称'"
                 />
-              </el-form-item>
+              </el-form-item> -->
+              <el-form-item label="客户名称:" prop="clientName">
+                  <el-input v-model="form.clientName" placeholder="请输入客户名称" clearable></el-input>
+                </el-form-item>
               <el-form-item label="运单号:" prop="waybillNumber">
                 <el-input v-model="form.waybillNumber" placeholder="请输入运单号" clearable></el-input>
               </el-form-item>
@@ -233,7 +236,7 @@ export default {
     },
     // 查询
     search () {
-      this.form.clientName = this.$refs.searchCustomerName.form.searchName
+      // this.form.clientName = this.$refs.searchCustomerName.form.searchName
       this.queryList('searchBtn')
     },
     // 重置
@@ -242,7 +245,7 @@ export default {
       this.form.createTime = ''
       this.form.createTimeStart = ''
       this.form.createTimeEnd = ''
-      this.$refs.searchCustomerName.form.searchName = ''
+      // this.$refs.searchCustomerName.form.searchName = ''
       // this.form.createTime = [this.formatCurrentDate(), this.formatCurrentDate()]
       // this.form.createTimeStart = this.formatCurrentDate()
       // this.form.createTimeEnd = this.formatCurrentDate()

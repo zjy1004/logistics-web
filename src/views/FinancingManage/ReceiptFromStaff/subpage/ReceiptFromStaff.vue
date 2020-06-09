@@ -112,7 +112,7 @@
         />
       </div>
       <div class="right-con common-div">
-        <div class="tip">本次预收款运单明细</div>
+        <div class="tip">本次预收款运单明细 <span class="t-info">(单次最多确认200条运单)</span></div>
         <div class="head-con">
           <div class="head-left">总计（元）：<span>￥{{rightTotal}}</span></div>
           <!-- <div class="head-left">总计（元）：<span>￥</span></div> -->
@@ -257,6 +257,25 @@ export default {
       this.$nextTick(() => {
         this.paginationChange = false
       })
+    },
+    rightTableData (newVal, oldVal) {
+      if (newVal.length > 200) {
+        let newArr = newVal.slice(200)
+        let leftTable = this.$refs.leftTable
+        if (newArr.length > 0) {
+          this.$notify({
+            type: 'error',
+            message: '单次最多确认200条运单'
+          })
+        }
+        this.leftTableData.forEach(item => {
+          newArr.forEach(newItem => {
+            if (item.waybillId === newItem.waybillId) {
+              leftTable.toggleRowSelection(item, false)
+            }
+          })
+        })
+      }
     }
   },
   methods: {
@@ -379,7 +398,14 @@ export default {
           message: '收款金额需大于0！'
         })
       } else {
-        this.receiptConfirmVisible = true
+        if (this.rightTableData.length <= 200) {
+          this.receiptConfirmVisible = true
+        } else {
+          this.$notify({
+            type: 'error',
+            message: '单次最多确认200条运单'
+          })
+        }
       }
     },
     sure () {
@@ -472,6 +498,10 @@ export default {
         height: 14px;
         .mixin-sc(14px;#333);
         line-height: 14px;
+      }
+      .t-info {
+        .mixin-sc(14px;#f00);
+        margin-left: 10px;
       }
     }
     .left-con{

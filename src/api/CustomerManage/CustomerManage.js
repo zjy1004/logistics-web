@@ -26,6 +26,11 @@ const CustomerManageAjax = {
     let result = Post('/crm/clientManageController/delete/clientAccountManage', params)
     return result
   },
+  ResetPwd (params) {
+    // 重置密码
+    let result = PostFromData('/crm/auth/password/reset/byaccount', params)
+    return result
+  },
   getRelevanceList (params) {
     // 账户信息列表
     let result = Get('/crm/clientManageController/select/clientAccountManage', params)

@@ -47,19 +47,25 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="发货方:" prop="sendClientName">
+                    <el-input v-model="form.sendClientName" placeholder="请输入发货方名称" clearable></el-input>
+                  </el-form-item>
+                  <!-- <el-form-item label="发货方:" prop="sendClientName">
                     <search-by-name
                       ref="searchSendName"
                       :searchType="'send'"
                       :placeholderText="'请输入发货方名称'"
                     />
-                  </el-form-item>
+                  </el-form-item> -->
                   <el-form-item label="收货方:" prop="receiveClientName">
+                    <el-input v-model="form.receiveClientName" placeholder="请输入收货方名称" clearable></el-input>
+                  </el-form-item>
+                  <!-- <el-form-item label="收货方:" prop="receiveClientName">
                     <search-by-name
                       ref="searchReceiveName"
                       :searchType="'receive'"
                       :placeholderText="'请输入收货方名称'"
                     />
-                  </el-form-item>
+                  </el-form-item> -->
                   <el-form-item label="线路:" prop="pkLine">
                     <el-select v-model.number="form.pkLine" @change="lineChange" placeholder="请选择线路" clearable filterable>
                       <el-option
@@ -285,8 +291,8 @@ export default {
       })
     },
     search () {
-      this.form.sendClientName = this.$refs.searchSendName.form.searchName
-      this.form.receiveClientName = this.$refs.searchReceiveName.form.searchName
+      // this.form.sendClientName = this.$refs.searchSendName.form.searchName
+      // this.form.receiveClientName = this.$refs.searchReceiveName.form.searchName
       this.queryList('searchBtn')
     },
     resetForm () {
@@ -294,8 +300,8 @@ export default {
       this.form.createTime = [this.formatCurrentDate(), this.formatCurrentDate()]
       this.form.createTimeStart = this.formatCurrentDate()
       this.form.createTimeEnd = this.formatCurrentDate()
-      this.$refs.searchSendName.form.searchName = ''
-      this.$refs.searchReceiveName.form.searchName = ''
+      // this.$refs.searchSendName.form.searchName = ''
+      // this.$refs.searchReceiveName.form.searchName = ''
     },
     dateChange (val) {
       if (!val) {

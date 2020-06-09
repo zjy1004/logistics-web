@@ -231,38 +231,6 @@
           </div>
         </div>
         <div class="flow-wrap">
-          <!-- <div class="flow-item1">
-            <div class="i-left">
-              <div class="number">10000元</div>
-              <div class="text">驮付宝代收货款</div>
-            </div>
-            <div class="i-right">
-              <div class="r-top">
-                <div class="r-number">7000元</div>
-                <div class="text">扫码支付</div>
-              </div>
-              <div class="r-bottom">
-                <div class="r-number">3000元</div>
-                <div class="text">批量支付</div>
-              </div>
-            </div>
-          </div>
-           <div class="flow-item1">
-            <div class="i-left">
-              <div class="number">1000元</div>
-              <div class="text">驮付宝运费</div>
-            </div>
-            <div class="i-right">
-              <div class="r-top">
-                <div class="r-number">700元</div>
-                <div class="text">扫码支付</div>
-              </div>
-              <div class="r-bottom">
-                <div class="r-number">300元</div>
-                <div class="text">批量支付</div>
-              </div>
-            </div>
-          </div> -->
           <div class="flow-item2">
             <div class="number">{{(flowObj.receivableGoodsByOnline*1 + flowObj.receivableGoodsByOffline*1).toFixed(2)}}元</div>
             <div class="text">代收货款总金额<span style="color:red"> (GMV)</span></div>
@@ -319,19 +287,7 @@ export default {
         minCreateTime: '', // 开始时间
         maxCreateTime: '' // 截止时间
       },
-      tableData: [
-        // {a: 1, logisticsName: '物流1', value: 1000, d: '1'},
-        // {a: 2, logisticsName: '物流2', value: 2000, d: '2'},
-        // {a: 3, logisticsName: '物流3', value: 3000, d: '3'},
-        // {a: 4, logisticsName: '物流4', value: 4000, d: '4'},
-        // {a: 5, logisticsName: '物流5', value: 5000, d: '5'},
-        // {a: 6, logisticsName: '物流6', value: 6000, d: '6'},
-        // {a: 7, logisticsName: '物流7', value: 7000, d: '7'},
-        // {a: 8, logisticsName: '物流8', value: 8000, d: '8'},
-        // {a: 9, logisticsName: '物流9', value: 9000, d: '9'},
-        // {a: 10, logisticsName: '物流10', value: 10000, d: '10'},
-        // {a: 11, logisticsName: '物流11', value: 11000, d: '11'}
-      ],
+      tableData: [],
       pieData: [ // 饼图Data
         {}
       ],
@@ -534,9 +490,9 @@ export default {
           this.sevenAddUserObj = data[1]
           this.thirtyAddUserObj = data[2]
           this.totalAddUserObj = data[3]
-          this.flowForm.minCreateTime = getDay(-7)
-          this.flowForm.maxCreateTime = getDay(0)
-          this.queryFinancialFlow(this.flowForm)
+          // this.flowForm.minCreateTime = getDay(-7)
+          // this.flowForm.maxCreateTime = getDay(0)
+          // this.queryFinancialFlow(this.flowForm)
         }
       })
     },

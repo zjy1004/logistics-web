@@ -10,9 +10,17 @@
                 <el-input :title="form.waybillNumber" v-model="form.waybillNumber" placeholder="请输入运单号" clearable></el-input>
               </el-form-item>
               <el-form-item label="发货方:" prop="sendClient">
-                <el-select v-model.number="form.sendClient" filterable placeholder="请选择发货方" clearable>
+                <el-select
+                  v-model.number="form.sendClient"
+                  filterable
+                  remote
+                  reserve-keyword
+                  :remote-method="searchSendClient"
+                  :loading="loading"
+                  clearable
+                  placeholder="请选择发货方">
                   <el-option
-                    v-for="(item, index) in RepairDepotOptions"
+                    v-for="(item, index) in sendClientOptions"
                     :key="index"
                     :label="item.clientName"
                     :value="item.id">
@@ -20,9 +28,17 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="收货方:" prop="receiveClient">
-                <el-select v-model="form.receiveClient" filterable placeholder="请选择收货方" clearable>
+                <el-select
+                  v-model="form.receiveClient"
+                  filterable
+                  remote
+                  reserve-keyword
+                  :remote-method="searchReceiveClient"
+                  :loading="loading"
+                  clearable
+                  placeholder="请选择收货方">
                   <el-option
-                    v-for="(item, index) in DistributorOptions"
+                    v-for="(item, index) in receiveClientOptions"
                     :key="index"
                     :label="item.clientName"
                     :value="item.id">
@@ -270,6 +286,10 @@ import PrintWayAndBoxBill from '../NewWaybill/subpage/printWayBoxBill'
 export default {
   data () {
     return {
+      clientName: '',
+      loading: false,
+      sendClientOptions: [],
+      receiveClientOptions: [],
       pageFlag: '',
       clickSearch: false,
       printHeaderInfo: {}, // 配货单
@@ -315,6 +335,8 @@ export default {
       let flag = newVal.query.index
       this.pageFlag = flag
       this.whichPage(flag)
+      // this.clientName = ''
+      this.getClient(this.clientName, 'created')
     },
     createDateValue (newVal, oldVal) {
       if (newVal === null) {
@@ -339,7 +361,8 @@ export default {
     ...mapGetters(['formatDate'])
   },
   created () {
-    this.GetClientData()
+    // this.GetClientData()
+    this.getClient(this.clientName, 'created')
     let flag = this.$route.query.index
     this.whichPage(flag)
   },
@@ -669,14 +692,49 @@ export default {
         }
       })
     },
-    GetClientData (val) { // 1修理厂2经销商
-      waybillManageAjax.GetClientData(val).then(res => {
+    getClient (val, type) {
+      waybillManageAjax.QueryClient({clientName: val}).then(res => {
         if (res.code === 200) {
-          this.RepairDepotOptions = res.data[1]
-          this.DistributorOptions = res.data[2]
+          this.clientName = ''
+          if (type === 'created') {
+            this.sendClientOptions = res.data
+            this.receiveClientOptions = res.data
+          }
+          if (type === 'send') {
+            this.sendClientOptions = res.data
+            this.loading = false
+          }
+          if (type === 'receive') {
+            this.receiveClientOptions = res.data
+            this.loading = false
+          }
         }
       })
     },
+    searchSendClient (query) {
+      if (query !== '') {
+        this.loading = true
+        this.getClient(query, 'send')
+      } else {
+        this.getClient(this.clientName, 'send')
+      }
+    },
+    searchReceiveClient (query) {
+      if (query !== '') {
+        this.loading = true
+        this.getClient(query, 'receive')
+      } else {
+        this.getClient(this.clientName, 'receive')
+      }
+    },
+    // GetClientData (val) { // 1修理厂2经销商
+    //   waybillManageAjax.GetClientData(val).then(res => {
+    //     if (res.code === 200) {
+    //       this.RepairDepotOptions = res.data[1]
+    //       this.DistributorOptions = res.data[2]
+    //     }
+    //   })
+    // },
     waybillPutInStorageReturnGoodsBatch (val, flag) { // 退货运单确认入库9确认退货10(批量)
       WaybillApiAjax.waybillPutInStorageReturnGoodsBatch(val).then(res => {
         if (res.code === 200) {

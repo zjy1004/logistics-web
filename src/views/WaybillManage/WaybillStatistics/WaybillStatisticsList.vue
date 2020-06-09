@@ -22,7 +22,15 @@
               </el-col>
               <el-col v-show="isRevoke" :span="6" :offset="1">
                 <el-form-item label="客户:" prop="clientId">
-                  <el-select v-model.number="form.clientId" filterable placeholder="请选择客户" clearable>
+                  <el-select
+                    v-model.number="form.clientId"
+                    filterable
+                    remote
+                    reserve-keyword
+                    :remote-method="searchClient"
+                    :loading="loading"
+                    clearable
+                    placeholder="请选择客户">
                     <el-option
                       v-for="(item,index) in clientIdOptions"
                       :key="index"
@@ -72,7 +80,15 @@
               </el-col>
               <el-col v-show="!isRevoke" :span="6" :offset="1">
                 <el-form-item label="客户:" prop="clientId">
-                  <el-select v-model.number="form.clientId" filterable placeholder="请选择客户" clearable>
+                  <el-select
+                    v-model.number="form.clientId"
+                    filterable
+                    remote
+                    reserve-keyword
+                    :remote-method="searchClient"
+                    :loading="loading"
+                    clearable
+                    placeholder="请选择客户">
                     <el-option
                       v-for="(item,index) in clientIdOptions"
                       :key="index"
@@ -268,6 +284,8 @@ export default {
   name: 'WaybillStatisticsList',
   data () {
     return {
+      loading: false,
+      clientName: '',
       titleName: '发货运单',
       clientIdOptions: [],
       activeNames: ['1'],
@@ -307,6 +325,7 @@ export default {
             }
             this.resetForm()
             this.search()
+            this.getClient(this.clientName)
           }
         }
       }
@@ -335,27 +354,44 @@ export default {
   },
   methods: {
     init (type) {
-      this.getClientData()
+      // this.getClientData()
       this.queryLines()
       this.queryDrivers()
       this.search()
+      this.getClient(this.clientName)
     },
-    getClientData (val) { // 1修理厂2经销商
-      waybillManageAjax.GetClientData(val).then(res => {
+    getClient (val) {
+      waybillManageAjax.QueryClient({clientName: val}).then(res => {
         if (res.code === 200) {
-          let temp = [...res.data[1].concat(res.data[2])]
-          let hash = {}
-          let result = temp.reduce((item, next) => {
-            if (!hash[next.id]) {
-              hash[next.id] = true
-              item.push(next)
-            }
-            return item
-          }, [])
-          this.clientIdOptions = result
+          this.clientIdOptions = res.data
+          this.loading = false
         }
       })
     },
+    searchClient (query) {
+      if (query !== '') {
+        this.loading = true
+        this.getClient(query)
+      } else {
+        this.getClient(this.clientName)
+      }
+    },
+    // getClientData (val) { // 1修理厂2经销商
+    //   waybillManageAjax.GetClientData(val).then(res => {
+    //     if (res.code === 200) {
+    //       let temp = [...res.data[1].concat(res.data[2])]
+    //       let hash = {}
+    //       let result = temp.reduce((item, next) => {
+    //         if (!hash[next.id]) {
+    //           hash[next.id] = true
+    //           item.push(next)
+    //         }
+    //         return item
+    //       }, [])
+    //       this.clientIdOptions = result
+    //     }
+    //   })
+    // },
     // 查询线路
     queryLines () {
       WaybillStatisticsAjax.GetLines().then((response) => {

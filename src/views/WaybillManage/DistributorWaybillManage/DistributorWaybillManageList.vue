@@ -24,14 +24,15 @@
               </el-form-item>
 
               <el-form-item label="收货方:" prop="receiveClient">
-                <el-select v-model.number="form.receiveClient" filterable placeholder="请选择收货方" clearable>
+                <el-input :title="form.clientName" v-model="form.clientName" placeholder="请输入收货方名称" clearable></el-input>
+                <!-- <el-select v-model.number="form.receiveClient" filterable placeholder="请选择收货方" clearable>
                   <el-option
                     v-for="(item, index) in receiveClientNameOptions"
                     :key="index"
                     :label="item.clientName"
                     :value="item.id">
                   </el-option>
-                </el-select>
+                </el-select> -->
               </el-form-item>
 
               <el-form-item label="运输状态:" prop="waybillStatus">
@@ -179,7 +180,7 @@
 <script>
 import VPagination from '@/components/Pagination/Pagination'
 import WaybillApiAjax from '@/api/WaybillManage/WaybillApi'
-import waybillManageAjax from '@/api/WaybillManage/WaybillManage'
+// import waybillManageAjax from '@/api/WaybillManage/WaybillManage'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -188,6 +189,7 @@ export default {
       dateValue: '', // 选择范围日期
       waybillId: [], // 当前行主键ID
       form: {
+        clientName: '',
         waybillNumber: '', // 运单号
         receiveClient: '', // 收货方
         shiftRunName: '', // 班次
@@ -220,7 +222,7 @@ export default {
         {id: 3, name: '支付关闭'}
       ],
       tableData: [],
-      receiveClientNameOptions: [], // 收货方
+      // receiveClientNameOptions: [], // 收货方
       clickSearch: false
     }
   },
@@ -240,7 +242,7 @@ export default {
   },
   created () {
     this.whichPage()
-    this.GetClientData()
+    // this.GetClientData()
   },
   methods: {
     whichPage () {
@@ -325,14 +327,14 @@ export default {
           this.paginationParams.total = res.data.total
         }
       })
-    },
-    GetClientData (val) { // 1修理厂2经销商
-      waybillManageAjax.GetClientData(val).then(res => {
-        if (res.code === 200) {
-          this.receiveClientNameOptions = res.data[1]
-        }
-      })
     }
+    // GetClientData (val) { // 1修理厂2经销商
+    //   waybillManageAjax.GetClientData(val).then(res => {
+    //     if (res.code === 200) {
+    //       this.receiveClientNameOptions = res.data[1]
+    //     }
+    //   })
+    // }
 
   },
   components: {

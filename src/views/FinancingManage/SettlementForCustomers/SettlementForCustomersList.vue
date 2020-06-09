@@ -6,7 +6,7 @@
           <div class="form-con">
             <el-form :inline="true" ref="form" :model="form" class="demo-form-inline" label-width="95px">
               <div class="common-search">
-                <el-form-item label="客户名称:" prop="sendClient">
+                <!-- <el-form-item label="客户名称:" prop="sendClient">
                   <el-select v-model.number="form.sendClient" placeholder="请选择客户名称" clearable filterable>
                     <el-option
                       v-for="(item, index) in clientIdOptions"
@@ -15,6 +15,9 @@
                       :value="item.sendClientId">
                     </el-option>
                   </el-select>
+                </el-form-item> -->
+                <el-form-item label="客户名称:" prop="clientName">
+                  <el-input v-model="form.clientName" placeholder="请输入客户名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="开单日期:" prop="createTime">
                   <el-date-picker
@@ -115,9 +118,10 @@ export default {
   name: 'SettlementForCustomersList',
   data () {
     return {
-      clientIdOptions: [], // 客户
+      // clientIdOptions: [], // 客户
       form: {
         createTime: '',
+        clientName: '', // 客户名称
         sendClient: '', // 客户名称
         createTimeStart: '', // 开始时间
         createTimeEnd: '' // 截止时间
@@ -140,7 +144,7 @@ export default {
   methods: {
     init () {
       this.queryList()
-      this.GetClientData()
+      // this.GetClientData()
     },
     check (row) {
       this.$router.push({name: 'UnSettlementForCustomersList', query: {title: row.sendClientName, sendClient: row.sendClient, searchDate: this.form.createTime}})
@@ -163,15 +167,15 @@ export default {
         }
       })
     },
-    GetClientData (val) { // 1修理厂2经销商
-      SettlementForCustomersAjax.QuerySendClientList(val).then(res => {
-        if (res.code === 200) {
-          // this.receiveClientNameOptions = res.data[1]
-          // this.sendClientNameOptions = res.data[2]
-          this.clientIdOptions = res.data
-        }
-      })
-    },
+    // GetClientData (val) { // 1修理厂2经销商
+    //   SettlementForCustomersAjax.QuerySendClientList(val).then(res => {
+    //     if (res.code === 200) {
+    //       // this.receiveClientNameOptions = res.data[1]
+    //       // this.sendClientNameOptions = res.data[2]
+    //       this.clientIdOptions = res.data
+    //     }
+    //   })
+    // },
     // 查询
     search () {
       this.queryList('searchBtn')
@@ -183,6 +187,7 @@ export default {
       this.form.createTimeStart = ''
       this.form.createTimeEnd = ''
       this.form.sendClient = ''
+      this.form.clientName = ''
     },
     dateChange (val) {
       if (!val) {

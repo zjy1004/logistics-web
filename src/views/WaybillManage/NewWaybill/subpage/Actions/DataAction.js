@@ -11,7 +11,7 @@ function _queryClientData (_this) {
   WaybillAjax.GetClientData().then(response => {
     if (response.code === 200) {
       let logisticsId = JSON.parse(sessionStorage.getItem('userInfo')).logisticsId
-      if (logisticsId !== 29 && logisticsId !== 35 && logisticsId !== 36 && logisticsId !== 37 && logisticsId !== 38) {
+      if (logisticsId !== 29 && logisticsId !== 35 && logisticsId !== 36 && logisticsId !== 37 && logisticsId !== 38 && logisticsId !== 45) {
         sessionStorage.setItem('allClientData', JSON.stringify(response))
       }
       if (_this.disableWayAndShift) { // 退货运单，收发货方数据需要调换

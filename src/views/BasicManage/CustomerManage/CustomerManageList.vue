@@ -259,8 +259,7 @@
                   <a class="check" href="javascript:;" type="text" size="small" @click="queryDetail(scope.row)">查看</a>
                   <a class="edit" href="javascript:;" type="text" size="small" @click="edit(scope.row)">修改信息</a>
                   <a class="enable" href="javascript:;" type="text" size="small" @click="enable(scope.row)">{{scope.row.clientStatus ? '启用': '禁用'}}</a>
-                  <el-button :disabled="scope.row.isOpen === 1" type="text" @click="onlinePayChange(scope.row)">关闭驮付宝</el-button>
-                  <!-- <a class="enable" href="javascript:;" type="text" size="small" @click="onlinePayChange(scope.row)">{{scope.row.onlinePaySwith ? '开通驮付宝': '关闭驮付宝'}}</a> -->
+                  <el-button :disabled="scope.row.isOpen === 1" type="text" @click="closeOnlinePay(scope.row)">关闭驮付宝</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -279,6 +278,17 @@
         </div>
       </div>
     </div>
+    <v-dialog
+      v-if="closeOnlinePayShow"
+      title="提示"
+      :width="'486px'"
+      :closeShow="false"
+      mainText="你正在进行关闭驮付宝操作，关闭后该客户运单不再使用驮付宝线上清分结算，是否确定操作?"
+      :closeClickModal="false"
+      :dialogVisible="closeOnlinePayShow"
+      @click-cancel="clickCancel('closeOnlinePayShow')"
+      @click-sure="clickSure('closeOnlinePayShow')"
+    />
   </div>
 </template>
 
@@ -286,9 +296,12 @@
 import VPagination from '@/components/Pagination/Pagination'
 import CustomerManageAjax from '@/api/CustomerManage/CustomerManage'
 import SiteManageAjax from '@/api/SiteManage/SiteManage'
+import VDialog from '@/components/Dialog/Dialog'
 export default {
   data () {
     return {
+      closeOnlinePayShow: false,
+      closeParam: {},
       clickSearch: false,
       showAreaAndLogistics: false,
       form: {
@@ -352,6 +365,10 @@ export default {
       fileList: [],
       typeError: false
     }
+  },
+  components: {
+    VDialog,
+    VPagination
   },
   created () {
     this.getUserType()
@@ -419,6 +436,16 @@ export default {
     }
   },
   methods: {
+    clickCancel (flag) { // 弹框取消
+      if (flag === 'closeOnlinePayShow') {
+        this.closeOnlinePayShow = false
+      }
+    },
+    clickSure (flag) { // 弹框确定
+      if (flag === 'closeOnlinePayShow') {
+        this.closeOnlinePayAjax(this.closeParam)
+      }
+    },
     getUserType () {
       let userInfo = sessionStorage.getItem('userInfo')
       if (userInfo) {
@@ -477,35 +504,25 @@ export default {
       }
       this.updateClientManageStatus(obj)
     },
-    onlinePayChange (row) {
-      let closeParam = {
+    closeOnlinePay (row) { // 关闭驮付宝
+      this.closeParam = {
         clientId: row.clientId,
         currentClearingFunds: row.currentClearingFunds,
         fundsAccountFlag: 2
       }
-      CustomerManageAjax.setOrCancelFundsAccount(closeParam).then(res => {
+      this.closeOnlinePayShow = true
+    },
+    closeOnlinePayAjax (val) { // 关闭驮付宝请求
+      CustomerManageAjax.setOrCancelFundsAccount(val).then(res => {
         if (res.code === 200) {
+          this.closeOnlinePayShow = false
           this.$notify({
             type: 'success',
-            message: '关闭成功!'
+            message: '关闭成功'
           })
           this.queryClientList(this.querySchema)
         }
       })
-      // let postValue = ''
-      // if (row.onlinePaySwith === 0) {
-      //   postValue = 1
-      // } else if (row.onlinePaySwith === 1) {
-      //   postValue = 0
-      // }
-      // CustomerManageAjax.updateClientManageOnline({clientIdList: [row.clientId], onlinePaySwith: postValue}).then(res => {
-      //   if (res.code === 200) {
-      //     this.$notify({
-      //       type: 'success',
-      //       message: '更新成功！'
-      //     })
-      //   }
-      // })
     },
     disableRow () {
       if (this.multipleSelection < 1) {
@@ -673,9 +690,6 @@ export default {
     exportExcel () {
       window.location.href = this.exportUrl
     }
-  },
-  components: {
-    VPagination
   }
 }
 </script>

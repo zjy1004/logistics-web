@@ -339,7 +339,6 @@ export default {
       }
       // BusinessDataStatisticsAjax.QuerywaybillByOnlinePartList(queryParam).then(response => {
       //   if (response.code === 200) {
-      //     debugger
       //     this.tableData = response.data.list
       //     this.onlinePaginationParams.pageNum = response.data.currentPage
       //     this.onlinePaginationParams.total = response.data.total
