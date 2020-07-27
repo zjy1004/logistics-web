@@ -86,12 +86,9 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <!-- <el-form-item label="日期">
-                <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.createTimeStart" style="width: 100%;"></el-date-picker>
+              <el-form-item v-if="receivePhoneShow" label="收货方电话:" prop="receivePhone">
+                <el-input v-model="form.receivePhone" placeholder="请输入收货方电话" clearable></el-input>
               </el-form-item>
-              <el-form-item label="">
-                <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.createTimeEnd" style="width: 100%;"></el-date-picker>
-              </el-form-item> -->
               <el-form-item label="日期:">
                  <el-date-picker
                   style="width: 445px;"
@@ -296,6 +293,7 @@ export default {
       waybillStatusNameShow: true,
       financeStatusNameShow: true,
       operateShow: true,
+      receivePhoneShow: false,
       waybillTypeNameShow: false,
       colShow: true,
       lineNameShow: true,
@@ -304,6 +302,7 @@ export default {
       isCloseBillPage: false,
       waybillDeliveryTypeShow: true, // 是否显示运单配送类型
       form: {
+        receivePhone: '',
         stationId: '', // 站点
         // logisticsId: '', // 物流公司
         waybillNumber: '', // 运单号
@@ -404,6 +403,7 @@ export default {
         this.operateShow = true
         this.isCloseBillPage = false
         this.waybillDeliveryTypeShow = true
+        this.receivePhoneShow = false
         this.queryAllList(this.form)
       }
       if (flag === '1') {
@@ -433,6 +433,7 @@ export default {
         this.operateShow = true
         this.isCloseBillPage = false
         this.waybillDeliveryTypeShow = true
+        this.receivePhoneShow = false
 
         if (type === 'query') {
           this.form.queryStatus = 7
@@ -468,6 +469,7 @@ export default {
         this.operateShow = true
         this.isCloseBillPage = false
         this.waybillDeliveryTypeShow = true
+        this.receivePhoneShow = true
 
         if (type === 'query') {
           this.form.queryStatus = 2
@@ -503,6 +505,7 @@ export default {
         this.operateShow = true
         this.isCloseBillPage = false
         this.waybillDeliveryTypeShow = false
+        this.receivePhoneShow = false
 
         if (type === 'query') {
           this.form.queryStatus = 3
@@ -537,6 +540,7 @@ export default {
         this.operateShow = true
         this.isCloseBillPage = false
         this.waybillDeliveryTypeShow = false
+        this.receivePhoneShow = false
 
         if (type === 'query') {
           this.form.queryStatus = 8
@@ -573,6 +577,7 @@ export default {
         this.operateShow = true
         this.isCloseBillPage = false
         this.waybillDeliveryTypeShow = false
+        this.receivePhoneShow = false
 
         if (type === 'query') {
           this.form.queryStatus = 2

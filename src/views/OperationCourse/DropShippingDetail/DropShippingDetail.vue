@@ -155,8 +155,7 @@
       v-if="dialogVisible"
       title="提示"
       :width="'486px'"
-      :className="'param'"
-      mainText="是否确认打印？"
+      mainText="是否确认发车？"
       :closeClickModal="false"
       :dialogVisible="dialogVisible"
       @click-cancel="clickCancel"
@@ -250,20 +249,10 @@ export default {
     // 行发车
     depart () {
       if (this.runStatus === 0) { // 没发车
-        PrintPickingAjax.Departure({shiftRunId: this.shiftRunId}).then(response => {
-          if (response.code === 200) {
-            this.$notify({
-              type: 'success',
-              message: '发车成功！'
-            })
-            this.showDepart = false
-            this.init()
-          }
-        })
+        this.dialogVisible = true
       }
     },
     print () {
-      // this.dialogVisible = true
       let curDate = new Date()
       this.printHeaderInfo.currentDate = `${curDate.getFullYear()}/${curDate.getMonth() + 1}/${curDate.getDate()}`
       this.printHeaderInfo.currentTime = `${curDate.getHours()}:${curDate.getMinutes() < 10 ? '0' + curDate.getMinutes() : curDate.getMinutes()}`
@@ -272,16 +261,20 @@ export default {
       })
     },
     clickSure () {
-      // this.dialogVisible = false
-      // let curDate = new Date()
-      // this.printHeaderInfo.currentDate = `${curDate.getFullYear()}/${curDate.getMonth() + 1}/${curDate.getDate()}`
-      // this.printHeaderInfo.currentTime = `${curDate.getHours()}:${curDate.getMinutes()}`
-      // this.$nextTick(() => {
-      //   this.$print(this.$refs.print)
-      // })
+      this.dialogVisible = false
+      PrintPickingAjax.Departure({shiftRunId: this.shiftRunId}).then(response => {
+        if (response.code === 200) {
+          this.$notify({
+            type: 'success',
+            message: '发车成功！'
+          })
+          this.showDepart = false
+          this.init()
+        }
+      })
     },
     clickCancel () {
-      // this.dialogVisible = false
+      this.dialogVisible = false
     },
     goback () {
       this.$router.push({name: 'PrintPickingBill'})

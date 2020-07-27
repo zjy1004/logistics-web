@@ -436,6 +436,28 @@ export default {
   },
   components: { PrintWayAndBoxBill, SearchWaybill, SearchTable },
   computed: {
+    receiveClientType () {
+      if (this.receiveSearchRadio === '全部') {
+        return ''
+      }
+      if (this.receiveSearchRadio === '修理厂') {
+        return 1
+      }
+      if (this.receiveSearchRadio === '经销商') {
+        return 2
+      }
+    },
+    sendClientType () {
+      if (this.sendSearchRadio === '全部') {
+        return ''
+      }
+      if (this.sendSearchRadio === '修理厂') {
+        return 1
+      }
+      if (this.sendSearchRadio === '经销商') {
+        return 2
+      }
+    },
     boxBillCount () {
       let result = 0
       this.tableData.forEach(item => {
@@ -519,11 +541,21 @@ export default {
     },
     init () {
       this.computedWaybillReceivable()
-      this.queryClientData()
+      // this.queryClientData()
       this.queryStationList()
       this.queryReceiveStationList()
       this.queryAllLine()
       this.checkGroup = [...ENUMS.checkGroup]
+      if (!this.disableWayAndShift) { // 非退货运单
+        let receiveStroageVal = localStorage.getItem('receiveStroageVal')
+        let sendStroageVal = localStorage.getItem('sendStroageVal')
+        if (receiveStroageVal) {
+          this.receiveSearchRadio = receiveStroageVal
+        }
+        if (sendStroageVal) {
+          this.sendSearchRadio = sendStroageVal
+        }
+      }
       // 登录用户信息中获取结算方式
       let userInfo = sessionStorage.getItem('userInfo')
       if (userInfo) {
@@ -583,8 +615,8 @@ export default {
       _shortcutKeyUp(event, this)
     },
     // 查询全部收发货放客户信息
-    queryClientData () {
-      _queryClientData(this)
+    queryClientData (type, postObj) {
+      _queryClientData(this, type, postObj)
     },
     // 查询发货方站点下拉数据
     queryStationList () {

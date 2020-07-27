@@ -1287,6 +1287,9 @@ export default {
             }
             if (item.waybillClassify === 1) {
               item.waybillClassifyName = '非驮付宝运单'
+              if (item.waybillStatus === 4 || item.waybillStatus === 5) {
+                item.settlementTime = '＼'
+              }
             }
             if (item.waybillClassify === 2) {
               item.waybillClassifyName = '驮付宝运单'

@@ -7,7 +7,12 @@ const WaybillAjax = {
     return result
   },
   QueryClient (params) {
-    // 获取客户信息模糊查询
+    // 客户信息模糊查询
+    let result = Get('/crm/client/waybill/fuzzy/select', params)
+    return result
+  },
+  QueryCreateBillClient (params) {
+    // 开单客户信息模糊查询
     let result = Get('/crm/client/waybill/fuzzy', params)
     return result
   },

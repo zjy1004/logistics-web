@@ -4,7 +4,7 @@
       <div class="card_main">
         <div class="searchBar">
           <div class="form-con">
-            <el-form :inline="true" ref="form" :model="form" class="demo-form-inline" label-width="95px">
+            <el-form :inline="true" ref="form" :model="form" class="demo-form-inline" label-width="120px">
               <div class="common-search">
                 <el-form-item label="落地配物流:" prop="logisticsIdLand">
                   <el-select v-model.number="form.logisticsIdLand" placeholder="请选择落地配物流" clearable filterable>
@@ -13,6 +13,16 @@
                       :key="index"
                       :label="item.logisticsName"
                       :value="item.logisticsId">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="落地配收款状态:" prop="landReceiveStatus">
+                  <el-select v-model.number="form.landReceiveStatus" placeholder="请选择落地配收款状态" clearable>
+                    <el-option
+                      v-for="(item, index) in landReceiveOptions"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -134,6 +144,7 @@ export default {
     return {
       logisticsOptions: [], // 落地配物流下拉
       form: {
+        landReceiveStatus: '',
         logisticsId: '', // 物流公司id
         logisticsIdLand: '', // 落地配物流公司id
         createTimeStart: '', // 开始时间
@@ -143,7 +154,12 @@ export default {
       paginationParams: {pageSize: 10, total: 0, pageNum: 1},
       clickSearch: false,
       tableData: [],
-      selection: []
+      selection: [],
+      landReceiveOptions: [
+        {name: '全部', id: ''},
+        {name: '已收款', id: 1},
+        {name: '未收款', id: 2}
+      ]
     }
   },
   components: {
@@ -210,6 +226,7 @@ export default {
         query: {
           logisticsId: row.logisticsIdLand,
           logisticsName: row.logisticsNameLand,
+          landReceiveStatus: this.form.landReceiveStatus,
           createTimeStart: this.form.createTimeStart,
           createTimeEnd: this.form.createTimeEnd
         }
@@ -263,6 +280,13 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .common-search {
+    .el-form-item {
+      .el-form-item__label {
+        width: 110px !important;
+      }
+    }
   }
   .el-collapse-item__content{
     padding-bottom: 0px;

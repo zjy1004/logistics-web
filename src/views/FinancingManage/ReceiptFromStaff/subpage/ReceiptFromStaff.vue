@@ -11,10 +11,10 @@
       <div class="left-con common-div">
         <div class="tip">请按需勾选需要收款的运单</div>
         <div class="search-con">
-          <el-form :inline="true" ref="form" :model="form" class="demo-form-inline" label-width="70px">
+          <el-form :inline="true" ref="form" :model="form" class="demo-form-inline" label-width="80px">
             <el-row>
-              <el-col :span="12">
-                <el-form-item label="收货站点:" prop="stationId">
+              <el-col :span="13">
+                <el-form-item class="selectWidth" label="收货站点:" prop="stationId">
                   <el-select v-model.number="form.receiveStationId" placeholder="请选择收货站点" clearable filterable>
                     <el-option
                       v-for="(item, index) in stationList"
@@ -25,12 +25,12 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="10">
+              <el-col :span="8">
                 <el-form-item label=''>
                   <el-input class="inputWidth" v-model="form.waybillNumberOrReceiveClientName" placeholder="运单号/收货方名称" clearable></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="2">
+              <el-col :span="3">
                 <el-button @click="search()">搜索</el-button>
               </el-col>
             </el-row>
@@ -39,7 +39,7 @@
               <el-col :span="24">
                 <el-form-item class="date-item" label="开单时间:" prop="time">
                   <el-date-picker
-                    style="width: 360px;"
+                    style="width: 330px;"
                     v-model="form.createTime"
                     type="daterange"
                     @change="dateChange"
@@ -341,6 +341,7 @@ export default {
       queryParam.pageSize = this.paginationParams.pageSize
       if (type === 'searchBtn') {
         this.clickSearch = true
+        this.rightTableData = []
       }
       ReceiptFromStaffAjax.QueryFinanceReconciliationLandVoList(queryParam).then(res => {
         if (res.code === 200) {
@@ -448,12 +449,26 @@ export default {
 <style lang="less">
 .receiptfrom-be-born-with {
   .search-con {
+    .el-form-item {
+      margin-right: 0;
+    }
     .el-form-item__label {
-      width: 70px !important;
+      width: 80px !important;
+    }
+    .el-date-editor .el-range-separator {
+      width: 10%;
+    }
+    .selectWidth {
+      .el-select {
+        width: 140px;
+      }
+      .el-input__inner {
+        width: 140px ;
+      }
     }
     .inputWidth {
       .el-input__inner {
-        width: 180px ;
+        width: 150px ;
         padding-right: 0!important;
       }
     }
@@ -493,7 +508,7 @@ export default {
     flex-direction: row;
     .common-div{
       flex-direction: column;
-      padding: 20px 20px 30px 20px;
+      padding: 20px 10px 30px 10px;
       .tip{
         height: 14px;
         .mixin-sc(14px;#333);

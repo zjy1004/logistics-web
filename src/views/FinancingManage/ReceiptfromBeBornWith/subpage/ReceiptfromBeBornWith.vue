@@ -9,14 +9,39 @@
     </div>
     <div class="main-con">
       <div class="left-con common-div">
-        <div class="tip">请按需勾选需要收款的运单</div>
+        <div v-if="false" class="tip">请按需勾选需要收款的运单</div>
         <div class="search-con">
           <el-form :inline="true" ref="form" :model="form" class="demo-form-inline" label-width="70px">
             <el-row>
-              <el-col :span="15">
+              <el-col :span="13">
+                <el-form-item class="receiveStatus selectWidth" label="落地配收款状态:" prop="landReceiveStatus">
+                  <el-select v-model.number="form.landReceiveStatus" placeholder="请选择落地配收款状态" clearable>
+                    <el-option
+                      v-for="(item, index) in landReceiveOptions"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" :offset="0">
+                <el-form-item label=''>
+                  <el-input class="inputWidth" v-model="form.waybillNumberOrReceiveClientName" placeholder="运单号/修理厂名称" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3" :offset="0">
+                <el-form-item class="date-item">
+                  <el-button @click="search">搜索</el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <div style="height: 5px; width: 100%"></div>
+            <el-row>
+              <el-col :span="24">
                 <el-form-item class="date-item" label="开单时间:" prop="createTime">
                   <el-date-picker
-                    style="width: 360px;"
+                    style="width: 330px;"
                     v-model="form.createTime"
                     type="daterange"
                     @change="dateChange"
@@ -27,16 +52,6 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                   </el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2" :offset="0">
-                <el-form-item label=''>
-                  <el-input class="inputWidth" v-model="form.waybillNumberOrReceiveClientName" placeholder="运单号/修理厂名称" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="1" :offset="5">
-                <el-form-item class="date-item">
-                  <el-button @click="search">搜索</el-button>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -183,6 +198,7 @@ export default {
     return {
       logisticsName: '',
       form: {
+        landReceiveStatus: '',
         logisticsId: '',
         createTime: '',
         logisticsIdLand: '', // 落地配物流公司id
@@ -197,7 +213,12 @@ export default {
       leftSelection: [],
       rightTableData: [],
       paginationChange: false,
-      receiptConfirmVisible: false
+      receiptConfirmVisible: false,
+      landReceiveOptions: [
+        {name: '全部', id: ''},
+        {name: '已收款', id: 1},
+        {name: '未收款', id: 2}
+      ]
     }
   },
   computed: {
@@ -217,6 +238,7 @@ export default {
     if (this.$route.query) {
       this.form.logisticsIdLand = this.$route.query.logisticsId
       this.logisticsName = this.$route.query.logisticsName
+      this.form.landReceiveStatus = Number(this.$route.query.landReceiveStatus) || ''
       this.form.createTimeStart = this.$route.query.createTimeStart || ''
       this.form.createTimeEnd = this.$route.query.createTimeEnd || ''
       this.form.createTime = this.form.createTimeStart ? [this.form.createTimeStart, this.form.createTimeEnd] : []
@@ -294,6 +316,7 @@ export default {
       queryParam.pageSize = this.paginationParams.pageSize
       if (type === 'searchBtn') {
         this.clickSearch = true
+        this.rightTableData = []
       }
       ReceiptfromBeBornWithAjax.queryFinanceReconciliationLandVoList(queryParam).then(res => {
         if (res.code === 200) {
@@ -375,9 +398,26 @@ export default {
     .el-form-item__label {
       width: 70px !important;
     }
+    .receiveStatus {
+      .el-form-item__label {
+        width: 110px !important;
+      }
+    }
+    .el-date-editor .el-range-separator {
+      width: 10%;
+    }
+    .selectWidth {
+      .el-select {
+        width: 140px;
+      }
+      .el-input__inner {
+        width: 140px ;
+      }
+    }
     .inputWidth {
       .el-input__inner {
-        width: 200px ;
+        width: 150px ;
+        padding-right: 0!important;
       }
     }
   }
@@ -416,7 +456,7 @@ export default {
     flex-direction: row;
     .common-div{
       flex-direction: column;
-      padding: 20px 40px 30px 40px;
+      padding: 20px 10px 30px 10px;
       .tip{
         height: 14px;
         .mixin-sc(14px;#333);
@@ -432,8 +472,8 @@ export default {
       background: #fff;
       margin-right: 10px;
       .search-con{
-        margin: 20px 0;
-        height: 40px;
+        margin-bottom: 20px;
+        height: auto;
       }
       .table-con{
         display: flex;

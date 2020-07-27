@@ -290,6 +290,7 @@ export default {
       queryParam.pageSize = this.paginationParams.pageSize
       if (type === 'searchBtn') {
         this.clickSearch = true
+        this.rightTableData = []
       }
       SettlementForCustomersAjax.QuerySettlementOperationList(queryParam).then(res => {
         if (res.code === 200) {

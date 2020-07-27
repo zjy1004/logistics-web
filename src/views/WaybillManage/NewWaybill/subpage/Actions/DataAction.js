@@ -7,34 +7,60 @@ import RouteAjax from '@/api/RouteManage/RouteManage'
   param: _this vm
   return
 */
-function _queryClientData (_this) {
-  WaybillAjax.GetClientData().then(response => {
+function _queryClientData (_this, type, postObj) {
+  WaybillAjax.QueryCreateBillClient(postObj).then(response => {
     if (response.code === 200) {
-      let logisticsId = JSON.parse(sessionStorage.getItem('userInfo')).logisticsId
-      if (logisticsId !== 29 && logisticsId !== 35 && logisticsId !== 36 && logisticsId !== 37 && logisticsId !== 38 && logisticsId !== 45) {
-        sessionStorage.setItem('allClientData', JSON.stringify(response))
-      }
-      if (_this.disableWayAndShift) { // 退货运单，收发货方数据需要调换
-        _this.receiveSourceData = response.data['2']
-        _this.receiveSearchTable = response.data['2']
-        _this.sendSourceData = response.data['1']
-        _this.sendSearchTable = response.data['1']
-      } else {
-        _this.receiveSourceData = response.data['1']
-        _this.receiveSearchTable = response.data['1']
-        _this.sendSourceData = response.data['2']
-        _this.sendSearchTable = response.data['2']
-      }
-      if (!_this.disableWayAndShift) { // 非退货运单
-        let receiveStroageVal = localStorage.getItem('receiveStroageVal')
-        let sendStroageVal = localStorage.getItem('sendStroageVal')
-        if (receiveStroageVal) {
-          _this.receiveSearchRadio = receiveStroageVal
+      if (type === 'receive') {
+        _this.receiveSearchTable = response.data
+        if (_this.receiveSearchTable.length > 10) {
+          _this.receiveSearchTable = _this.receiveSearchTable.slice(0, 10)
         }
-        if (sendStroageVal) {
-          _this.sendSearchRadio = sendStroageVal
+        if (_this.receiveSearchTable.length > 0) {
+          _this.currentIndex = 0
+          _this.currentRow = _this.receiveSearchTable[0]
+          _this.setCurrentRow()
+        } else {
+          _this.currentRow = null
         }
       }
+      if (type === 'send') {
+        _this.sendSearchTable = response.data
+        if (_this.sendSearchTable.length > 10) {
+          _this.sendSearchTable = _this.sendSearchTable.slice(0, 10)
+        }
+        if (_this.sendSearchTable.length > 0) {
+          _this.currentIndex = 0
+          _this.currentRow = _this.sendSearchTable[0]
+          _this.setCurrentRow()
+        } else {
+          _this.currentRow = null
+        }
+      }
+      // let logisticsId = JSON.parse(sessionStorage.getItem('userInfo')).logisticsId
+      // if (logisticsId !== 29 && logisticsId !== 35 && logisticsId !== 36 && logisticsId !== 37 && logisticsId !== 38 && logisticsId !== 45 && logisticsId !== 46) {
+      //   sessionStorage.setItem('allClientData', JSON.stringify(response))
+      // }
+      // if (_this.disableWayAndShift) { // 退货运单，收发货方数据需要调换
+      //   _this.receiveSourceData = response.data['2']
+      //   _this.receiveSearchTable = response.data['2']
+      //   _this.sendSourceData = response.data['1']
+      //   _this.sendSearchTable = response.data['1']
+      // } else {
+      //   _this.receiveSourceData = response.data['1']
+      //   _this.receiveSearchTable = response.data['1']
+      //   _this.sendSourceData = response.data['2']
+      //   _this.sendSearchTable = response.data['2']
+      // }
+      // if (!_this.disableWayAndShift) { // 非退货运单
+      //   let receiveStroageVal = localStorage.getItem('receiveStroageVal')
+      //   let sendStroageVal = localStorage.getItem('sendStroageVal')
+      //   if (receiveStroageVal) {
+      //     _this.receiveSearchRadio = receiveStroageVal
+      //   }
+      //   if (sendStroageVal) {
+      //     _this.sendSearchRadio = sendStroageVal
+      //   }
+      // }
     }
   })
 }

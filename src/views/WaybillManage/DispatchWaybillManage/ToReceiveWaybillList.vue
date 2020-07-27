@@ -68,28 +68,40 @@
                 min-width="20%"
                 prop="waybillNumber"
                 label="运单号">
+                <template slot-scope="scope">
+                  <span :class="{'noPerfectCol': scope.row.perfectFlag === 0}">{{scope.row.waybillNumber}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 min-width="12%"
                 prop="createTime"
                 label="开单日期">
+                <template slot-scope="scope">
+                  <span :class="{'noPerfectCol': scope.row.perfectFlag === 0}">{{scope.row.createTime}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 min-width="15%"
                 prop="sendClientName"
                 label="发货方">
+                <template slot-scope="scope">
+                  <span :class="{'noPerfectCol': scope.row.perfectFlag === 0}">{{scope.row.sendClientName}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 min-width="15%"
                 prop="receiveClientName"
                 label="收货方">
+                <template slot-scope="scope">
+                  <span :class="{'noPerfectCol': scope.row.perfectFlag === 0}">{{scope.row.receiveClientName}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 min-width="12%"
                 prop="waybillDeliveryType"
                 label="配送类型">
                 <template slot-scope="scope">
-                  <span>{{scope.row.waybillDeliveryType === 3 ? '联营调度运单' : '自营调度运单'}}</span>
+                  <span :class="{'noPerfectCol': scope.row.perfectFlag === 0}">{{scope.row.waybillDeliveryType === 3 ? '联营调度运单' : '自营调度运单'}}</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -421,6 +433,9 @@ export default {
 <style lang="less">
 @import '../../../style/base.less';
 .toReceive-waybill{
+  .noPerfectCol{
+    color: #f00;
+  }
   .btns{
     display: flex;
     justify-content: center;

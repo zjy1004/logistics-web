@@ -35,7 +35,7 @@
                 </el-radio-group>
               </el-form-item>
             </el-col>
-            <el-col :span="7">
+            <el-col v-if="false" :span="7">
               <div class='update-client-data'>
                 <i class="el-icon-refresh" @click="queryClientData()"></i><span>更新客户列表</span>
               </div>
@@ -47,7 +47,7 @@
                 <el-input
                   :autofocus="true"
                   ref="receiveClientName"
-                  @input.native="search($event, 'clientName', receiveForm.receiveClientName, 'receiveForm')"
+                  @input="search($event, 'clientName', receiveForm.receiveClientName, 'receiveForm')"
                   @keyup.native.stop="shortcutKeyUp"
                   @blur="blurFormInput('receiveForm')"
                   v-model="receiveForm.receiveClientName"
@@ -68,7 +68,7 @@
             <el-col :span="7">
               <el-form-item label="客户编码:" class="receiveType">
                 <el-input
-                  @input.native="search($event, 'clientCode', receiveForm.clientCode, 'receiveForm')"
+                  @input="search($event, 'clientCode', receiveForm.clientCode, 'receiveForm')"
                   @keyup.native.stop="shortcutKeyUp"
                   @blur="blurFormInput('receiveForm')"
                   v-model="receiveForm.clientCode"
@@ -81,7 +81,7 @@
             <el-col :span="8" class="left-col">
               <el-form-item label="联系电话:" class="receiveType" :class="{'notPerfect': orderNumber && bbdReceivedFlag === 0}">
                 <el-input
-                  @input.native="search($event, 'phone', receiveForm.phone, 'receiveForm')"
+                  @input="search($event, 'phone', receiveForm.phone, 'receiveForm')"
                   @keyup.native.stop="shortcutKeyUp"
                   @blur="blurFormInput('receiveForm')"
                   v-model.trim="receiveForm.phone"
@@ -149,7 +149,7 @@
               <el-form-item label="发货方名称:" class="sendType" :class="{'notPerfect': orderNumber && bbdSendFlag === 0}">
                 <el-input
                   ref="sendClinetName"
-                  @input.native="search($event, 'clientName', sendForm.sendClientName, 'sendForm')"
+                  @input="search($event, 'clientName', sendForm.sendClientName, 'sendForm')"
                   @keyup.native.stop="shortcutKeyUp"
                   @blur="blurFormInput('sendForm')"
                   v-model="sendForm.sendClientName"
@@ -171,7 +171,7 @@
               <el-form-item label="客户编码:" class="sendType">
                 <el-input
                   ref="sendClinetCode"
-                  @input.native="search($event, 'clientCode', sendForm.clientCode, 'sendForm')"
+                  @input="search($event, 'clientCode', sendForm.clientCode, 'sendForm')"
                   @keyup.native.stop="shortcutKeyUp"
                   @blur="blurFormInput('sendForm')"
                   v-model="sendForm.clientCode"
@@ -185,7 +185,7 @@
               <el-form-item label="联系电话:" class="sendType" :class="{'notPerfect': orderNumber && bbdSendFlag === 0}">
                 <el-input
                   ref="sendPhone"
-                  @input.native="search($event, 'phone', sendForm.phone, 'sendForm')"
+                  @input="search($event, 'phone', sendForm.phone, 'sendForm')"
                   @keyup.native.stop="shortcutKeyUp"
                   @blur="blurFormInput('sendForm')"
                   v-model.trim="sendForm.phone"
@@ -286,7 +286,7 @@
               prop="count"
               label="包裹数量">
               <template slot-scope="scope">
-                <el-input-number @keyup.native.stop="countKeyEvent($event, scope.row.rowNum)" :ref="scope.row.ref" v-model="scope.row.count" :min="scope.row.min" :max="99"></el-input-number>
+                <el-input-number @keyup.native.stop="countKeyEvent($event, scope.row.rowNum)" :ref="scope.row.ref" v-model="scope.row.count" :min="scope.row.min" :max="999"></el-input-number>
               </template>
             </el-table-column>
             <el-table-column
@@ -507,6 +507,28 @@ export default {
   },
   components: { PrintWayAndBoxBill, SearchWaybill, SearchTable, EditFreight },
   computed: {
+    receiveClientType () {
+      if (this.receiveSearchRadio === '全部') {
+        return ''
+      }
+      if (this.receiveSearchRadio === '修理厂') {
+        return 1
+      }
+      if (this.receiveSearchRadio === '经销商') {
+        return 2
+      }
+    },
+    sendClientType () {
+      if (this.sendSearchRadio === '全部') {
+        return ''
+      }
+      if (this.sendSearchRadio === '修理厂') {
+        return 1
+      }
+      if (this.sendSearchRadio === '经销商') {
+        return 2
+      }
+    },
     boxBillCount () {
       let result = 0
       this.tableData.forEach(item => {
@@ -577,8 +599,6 @@ export default {
     deep: true
   },
   created () {
-    // let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-    // this.sendForm.logisticsId = userInfo.logisticsId
     this.init()
   },
   mounted () {
@@ -653,23 +673,24 @@ export default {
       this.queryAllLine()
       this.checkGroup = [...ENUMS.checkGroup]
       // 获取本地缓存的全部收发货方信息
-      let localAllClientData = JSON.parse(sessionStorage.getItem('allClientData'))
-      if (localAllClientData) {
-        this.getLocalStorageClientData()
-      } else {
-        this.queryClientData()
+      // let localAllClientData = JSON.parse(sessionStorage.getItem('allClientData'))
+      // if (localAllClientData) {
+      //   this.getLocalStorageClientData()
+      // } else {
+      //   this.queryClientData()
+      // }
+      if (!this.disableWayAndShift) { // 非退货运单
+        let receiveStroageVal = localStorage.getItem('receiveStroageVal')
+        let sendStroageVal = localStorage.getItem('sendStroageVal')
+        if (receiveStroageVal) {
+          this.receiveSearchRadio = receiveStroageVal
+        }
+        if (sendStroageVal) {
+          this.sendSearchRadio = sendStroageVal
+        }
       }
       // 连续开单，锁定发货方信息
       this.pageType = this.$route.query.index
-      // if (this.pageType === 'add') {
-      //   let sendFormVal = JSON.parse(localStorage.getItem('sendFormVal'))
-      //   if (sendFormVal) {
-      //     let userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-      //     if (sendFormVal.logisticsId === userInfo.logisticsId) {
-      //       this.sendForm = sendFormVal
-      //     }
-      //   }
-      // }
       if (this.pageType === 'add') {
         let sendFormVal = JSON.parse(sessionStorage.getItem('sendFormVal'))
         if (sendFormVal) {
@@ -736,8 +757,8 @@ export default {
       })
     },
     // 查询全部收发货放客户信息
-    queryClientData () {
-      _queryClientData(this)
+    queryClientData (type, postObj) {
+      _queryClientData(this, type, postObj)
     },
     // 获取全部收发货放客户信息
     getLocalStorageClientData () {
@@ -871,10 +892,8 @@ export default {
           localStorage.setItem('receiveStroageVal', this.receiveSearchRadio)
           localStorage.setItem('sendStroageVal', this.sendSearchRadio)
           if (this.sendForm.lockSendInfo) {
-            // localStorage.setItem('sendFormVal', JSON.stringify(this.sendForm))
             sessionStorage.setItem('sendFormVal', JSON.stringify(this.sendForm))
           } else {
-            // localStorage.removeItem('sendFormVal')
             sessionStorage.removeItem('sendFormVal')
           }
           if (this.checkList.length > 0) {

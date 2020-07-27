@@ -87,67 +87,81 @@ function _moneyChange (event, inputType, value, _this) {
   return
 */
 function _search (event, searchColName, val, editFormType, _this) {
-  let value = event.target.value
-  // if (value.length < 3) {
-  //   return false
-  // }
-  if (value === '') {
-    _this.receiveForm.isInput = ''
-    _this.sendForm.isInput = ''
-    return false
-  }
-  _this.disableSubmit = false
-  if (searchColName === 'phone') {
-    value = _this.validateOnlyNum(value)
-    _this.$nextTick(() => {
-      event.target.value = value
-    })
-  }
-  if (editFormType === 'receiveForm') { // 搜索收货方
-    _this.receiveSearchTable = _this.currrentSearchReceiveData.filter((item) => {
-      if (item[searchColName] === null) {
-        item[searchColName] = ''
-      }
-      if (searchColName === 'clientName') {
-        return item[searchColName].includes(value) || (item['clientNamePinYin'] && item['clientNamePinYin'].includes(value)) || (item['clientNameQuanPin'] && item['clientNameQuanPin'].includes(value))
-      } else {
-        return item[searchColName].includes(value)
-      }
-    })
-    if (_this.receiveSearchTable.length > 10) {
-      _this.receiveSearchTable = _this.receiveSearchTable.slice(0, 10)
+  _this.$nextTick(() => {
+    let value = event
+    // if (value.length < 3) {
+    //   return false
+    // }
+    if (value === '') {
+      _this.receiveForm.isInput = ''
+      _this.sendForm.isInput = ''
+      return false
     }
-    if (_this.receiveSearchTable.length > 0) {
-      _this.currentIndex = 0
-      _this.currentRow = _this.receiveSearchTable[0]
-      _this.setCurrentRow()
-    } else {
-      _this.currentRow = null
+    _this.disableSubmit = false
+    if (searchColName === 'phone') {
+      value = _this.validateOnlyNum(value)
+      _this.$nextTick(() => {
+        event = value
+      })
     }
-    _this.receiveForm.isInput = searchColName
-  } else if (editFormType === 'sendForm') { // 搜索发货方
-    _this.sendSearchTable = _this.currrentSearchSendData.filter((item) => {
-      if (item[searchColName] === null) {
-        item[searchColName] = ''
+    if (editFormType === 'receiveForm') { // 搜索收货方
+      // _this.receiveSearchTable = _this.currrentSearchReceiveData.filter((item) => {
+      //   if (item[searchColName] === null) {
+      //     item[searchColName] = ''
+      //   }
+      //   if (searchColName === 'clientName') {
+      //     return item[searchColName].includes(value) || (item['clientNamePinYin'] && item['clientNamePinYin'].includes(value)) || (item['clientNameQuanPin'] && item['clientNameQuanPin'].includes(value))
+      //   } else {
+      //     return item[searchColName].includes(value)
+      //   }
+      // })
+      // if (_this.receiveSearchTable.length > 10) {
+      //   _this.receiveSearchTable = _this.receiveSearchTable.slice(0, 10)
+      // }
+      // if (_this.receiveSearchTable.length > 0) {
+      //   _this.currentIndex = 0
+      //   _this.currentRow = _this.receiveSearchTable[0]
+      //   _this.setCurrentRow()
+      // } else {
+      //   _this.currentRow = null
+      // }
+      _this.receiveForm.isInput = searchColName
+      let postObj = {
+        nameOrPhone: searchColName === 'clientName' ? _this.receiveForm.receiveClientName : _this.receiveForm.phone,
+        receiveClientType: _this.pageType === 'revoke' ? '' : _this.receiveClientType,
+        queryType: _this.pageType === 'revoke' ? 1 : 2
       }
-      if (searchColName === 'clientName') {
-        return item[searchColName].includes(value) || (item['clientNamePinYin'] && item['clientNamePinYin'].includes(value)) || (item['clientNameQuanPin'] && item['clientNameQuanPin'].includes(value))
-      } else {
-        return item[searchColName].includes(value)
+      _this.queryClientData('receive', postObj)
+    } else if (editFormType === 'sendForm') { // 搜索发货方
+      // _this.sendSearchTable = _this.currrentSearchSendData.filter((item) => {
+      //   if (item[searchColName] === null) {
+      //     item[searchColName] = ''
+      //   }
+      //   if (searchColName === 'clientName') {
+      //     return item[searchColName].includes(value) || (item['clientNamePinYin'] && item['clientNamePinYin'].includes(value)) || (item['clientNameQuanPin'] && item['clientNameQuanPin'].includes(value))
+      //   } else {
+      //     return item[searchColName].includes(value)
+      //   }
+      // })
+      // if (_this.sendSearchTable.length > 10) {
+      //   _this.sendSearchTable = _this.sendSearchTable.slice(0, 10)
+      // }
+      // if (_this.sendSearchTable.length > 0) {
+      //   _this.currentIndex = 0
+      //   _this.currentRow = _this.sendSearchTable[0]
+      //   _this.setCurrentRow()
+      // } else {
+      //   _this.currentRow = null
+      // }
+      _this.sendForm.isInput = searchColName
+      let postObj = {
+        nameOrPhone: searchColName === 'clientName' ? _this.sendForm.sendClientName : _this.sendForm.phone,
+        sendClientType: _this.pageType === 'revoke' ? '' : _this.sendClientType,
+        queryType: _this.pageType === 'revoke' ? 2 : 1
       }
-    })
-    if (_this.sendSearchTable.length > 10) {
-      _this.sendSearchTable = _this.sendSearchTable.slice(0, 10)
+      _this.queryClientData('send', postObj)
     }
-    if (_this.sendSearchTable.length > 0) {
-      _this.currentIndex = 0
-      _this.currentRow = _this.sendSearchTable[0]
-      _this.setCurrentRow()
-    } else {
-      _this.currentRow = null
-    }
-    _this.sendForm.isInput = searchColName
-  }
+  })
 }
 
 /*

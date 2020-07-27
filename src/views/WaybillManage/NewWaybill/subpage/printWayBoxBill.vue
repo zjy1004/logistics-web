@@ -376,12 +376,21 @@ export default {
       }
     },
     batchPrint () {
+      let logisticsId = JSON.parse(sessionStorage.getItem('userInfo')).logisticsId
       this.batchPrintDate.printArr.forEach(item => {
         this.printData = {...item}
-        if (this.batchPrintDate.printType === '收方') {
-          this.printThreeWayBillFn('printId2') // 打印二联(收货方联)
+        if ((logisticsId >= 35 && logisticsId <= 38) || logisticsId === 29 || logisticsId === 46 || logisticsId === 50 || logisticsId === 51) { // 太原诸葛联盟
+          if (this.batchPrintDate.printType === '收方') {
+            this.printVerticalPlateWaybill('printId2') // 打印二联(收货方联)
+          } else {
+            this.printVerticalPlateWaybill('printId3') // 打印三联(物流公司联)
+          }
         } else {
-          this.printThreeWayBillFn('printId3') // 打印三联(物流公司联)
+          if (this.batchPrintDate.printType === '收方') {
+            this.printThreeWayBillFn('printId2') // 打印二联(收货方联)
+          } else {
+            this.printThreeWayBillFn('printId3') // 打印三联(物流公司联)
+          }
         }
       })
     },
@@ -466,7 +475,7 @@ export default {
       // this.printFirstWayBillFn('printId1')
       // this.printEndWayBillFn('printId2')
       let logisticsId = JSON.parse(sessionStorage.getItem('userInfo')).logisticsId
-      if ((logisticsId >= 35 && logisticsId <= 38) || logisticsId === 29) { // 太原诸葛联盟
+      if ((logisticsId >= 35 && logisticsId <= 38) || logisticsId === 29 || logisticsId === 46 || logisticsId === 50 || logisticsId === 51) { // 太原诸葛联盟
         if (this.checkList.includes('1')) { // 需要打印一联(发货方联)
           this.printVerticalPlateWaybill('printId1')
         }
@@ -510,13 +519,13 @@ export default {
       LODOP.ADD_PRINT_TEXT(10, 180, 220, 15, `开单时间：${printData.createTime}`) // 开单时间
       LODOP.SET_PRINT_STYLE('Alignment', 3)
       if (elementId === 'printId1') {
-        LODOP.ADD_PRINT_TEXT(10, 400, 80, 15, `发货方留存`)
+        LODOP.ADD_PRINT_TEXT(10, 360, 80, 15, `发货方留存`)
       }
       if (elementId === 'printId2') {
-        LODOP.ADD_PRINT_TEXT(10, 400, 80, 15, `收货方留存`)
+        LODOP.ADD_PRINT_TEXT(10, 360, 80, 15, `收货方留存`)
       }
       if (elementId === 'printId3') {
-        LODOP.ADD_PRINT_TEXT(10, 400, 80, 15, `物流回执联`)
+        LODOP.ADD_PRINT_TEXT(10, 360, 80, 15, `物流回执联`)
       }
       LODOP.ADD_PRINT_LINE(30, 0, 30, 480, 0, 1)
       LODOP.SET_PRINT_STYLE('Alignment', 2)
@@ -579,7 +588,7 @@ export default {
         LODOP.ADD_PRINT_TEXT(195, 5, 240, 25, `客服电话:${printData.logisticsPhone}`) // 客服电话
       }
       LODOP.SET_PRINT_STYLE('Alignment', 3)
-      LODOP.ADD_PRINT_TEXT(195, 240, 240, 25, `单号:${printData.waybillNumber}`) // 单号
+      LODOP.ADD_PRINT_TEXT(195, 240, 220, 25, `单号:${printData.waybillNumber}`) // 单号
       // 配置打印选项
       LODOP.SET_PRINT_MODE('RESELECT_PRINTER', true) // 允许重选打印机
       LODOP.SET_PRINTER_INDEX('GP-80160(Cut) Series')
@@ -588,6 +597,7 @@ export default {
       // LODOP.PREVIEW()
       LODOP.PRINT()
     },
+    // 打印三联竖版
     printVerticalPlateWaybill (elementId) {
       let printData = this.printData
       let LODOP = getLodop()
@@ -599,16 +609,16 @@ export default {
 
       LODOP.SET_PRINT_STYLE('FontSize', 12)
       LODOP.SET_PRINT_STYLEA(0, 'Color', '#000000')
-      LODOP.ADD_PRINT_TEXT(10, 15, 120, 15, `${printData.logisticsName}`) // 物流公司
-      LODOP.SET_PRINT_STYLE('Alignment', 3)
+      LODOP.ADD_PRINT_TEXT(10, 15, 150, 15, `${printData.logisticsName}`) // 物流公司
+      LODOP.SET_PRINT_STYLE('Alignment', 1)
       if (elementId === 'printId1') {
-        LODOP.ADD_PRINT_TEXT(10, 120, 120, 15, `[发货方留存]`)
+        LODOP.ADD_PRINT_TEXT(10, 150, 120, 15, `[发货方留存]`)
       }
       if (elementId === 'printId2') {
-        LODOP.ADD_PRINT_TEXT(10, 120, 120, 15, `[收货方留存]`)
+        LODOP.ADD_PRINT_TEXT(10, 150, 120, 15, `[收货方留存]`)
       }
       if (elementId === 'printId3') {
-        LODOP.ADD_PRINT_TEXT(10, 120, 120, 15, `[物流回执联]`)
+        LODOP.ADD_PRINT_TEXT(10, 150, 120, 15, `[物流回执联]`)
       }
 
       LODOP.ADD_PRINT_RECT(35, 15, 220, 285, 0, 1) // 外边框
@@ -626,7 +636,7 @@ export default {
       }
 
       LODOP.ADD_PRINT_LINE(60, 160, 125, 160, 0, 1)// 二维码
-      LODOP.ADD_PRINT_BARCODE(62, 162, 105, 105, 'QRCode', `${printData.waybillNumber}`) // 二维码
+      LODOP.ADD_PRINT_BARCODE(68, 172, 80, 80, 'QRCode', `${printData.waybillNumber}`) // 二维码
 
       LODOP.ADD_PRINT_LINE(125, 15, 125, 235, 0, 1)
       LODOP.SET_PRINT_STYLE('FontSize', 8)
@@ -694,7 +704,7 @@ export default {
       // LODOP.PREVIEW()
       LODOP.PRINT()
     },
-    // 打印二三联联版
+    // 打印二三联竖版
     printVerticalPlateWaybill23: function () {
       let printData = this.printData
       let LODOP = getLodop()
@@ -708,9 +718,10 @@ export default {
 
       LODOP.SET_PRINT_STYLE('FontSize', 12)
       LODOP.SET_PRINT_STYLEA(0, 'Color', '#000000')
-      LODOP.ADD_PRINT_TEXT(10, 15, 120, 15, `${printData.logisticsName}`) // 物流公司
-      LODOP.SET_PRINT_STYLE('Alignment', 3)
-      LODOP.ADD_PRINT_TEXT(10, 120, 120, 15, `[收货方留存]`)
+      LODOP.ADD_PRINT_TEXT(10, 15, 150, 15, `${printData.logisticsName}`) // 物流公司
+      LODOP.SET_PRINT_STYLE('Alignment', 1)
+      LODOP.ADD_PRINT_TEXT(10, 150, 120, 15, `[收货方留存]`)
+      // LODOP.ADD_PRINT_TEXT(10, 120, 120, 15, `[收货方留存]`)
 
       LODOP.ADD_PRINT_RECT(35, 15, 220, 285, 0, 1) // 外边框
       LODOP.SET_PRINT_STYLE('FontSize', 8)
@@ -725,7 +736,7 @@ export default {
       LODOP.ADD_PRINT_TEXT(110, 20, 200, 25, `电话:${printData.logisticsPhone}`) // 客服电话
 
       LODOP.ADD_PRINT_LINE(60, 160, 125, 160, 0, 1)// 二维码
-      LODOP.ADD_PRINT_BARCODE(62, 162, 105, 105, 'QRCode', `${printData.waybillNumber}`) // 二维码
+      LODOP.ADD_PRINT_BARCODE(68, 172, 80, 80, 'QRCode', `${printData.waybillNumber}`) // 二维码
 
       LODOP.ADD_PRINT_LINE(125, 15, 125, 235, 0, 1)
       LODOP.SET_PRINT_STYLE('FontSize', 8)
@@ -788,10 +799,11 @@ export default {
 
       LODOP.SET_PRINT_STYLE('FontSize', 12)
       LODOP.SET_PRINT_STYLEA(0, 'Color', '#000000')
-      LODOP.ADD_PRINT_TEXT(370, 15, 120, 15, `${printData.logisticsName}`) // 物流公司
-      LODOP.SET_PRINT_STYLE('Alignment', 3)
+      LODOP.ADD_PRINT_TEXT(370, 15, 150, 15, `${printData.logisticsName}`) // 物流公司
+      LODOP.SET_PRINT_STYLE('Alignment', 1)
 
-      LODOP.ADD_PRINT_TEXT(370, 120, 120, 15, `[物流回执联]`)
+      LODOP.ADD_PRINT_TEXT(370, 150, 120, 15, `[物流回执联]`)
+      // LODOP.ADD_PRINT_TEXT(370, 120, 120, 15, `[物流回执联]`)
 
       LODOP.ADD_PRINT_RECT(395, 15, 220, 285, 0, 1) // 外边框
       LODOP.SET_PRINT_STYLE('FontSize', 8)
@@ -805,7 +817,7 @@ export default {
       LODOP.ADD_PRINT_TEXT(450, 20, 200, 25, `站点:${printData.sendStationName}`) // 开单站点
 
       LODOP.ADD_PRINT_LINE(420, 160, 485, 160, 0, 1)// 二维码
-      LODOP.ADD_PRINT_BARCODE(422, 162, 105, 105, 'QRCode', `${printData.waybillNumber}`) // 二维码
+      LODOP.ADD_PRINT_BARCODE(428, 172, 80, 80, 'QRCode', `${printData.waybillNumber}`) // 二维码
 
       LODOP.ADD_PRINT_LINE(485, 15, 485, 235, 0, 1)
       LODOP.SET_PRINT_STYLE('FontSize', 8)

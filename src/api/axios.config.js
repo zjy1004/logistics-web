@@ -3,7 +3,7 @@ import axiosFromData from './axios.config.form.data'
 import { Loading, Notification } from 'element-ui'
 import router from '../router/index'
 
-axios.defaults.timeout = 30000
+axios.defaults.timeout = 90000
 axios.defaults.baseURL = process.env.API_BASE_URL
 // axios.defaults.baseURL = 'http://127.0.0.1:8085'
 

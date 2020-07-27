@@ -19,6 +19,9 @@
                 <el-form-item label="客户名称:" prop="clientName">
                   <el-input v-model="form.clientName" placeholder="请输入客户名称" clearable></el-input>
                 </el-form-item>
+                <el-form-item label="发货方电话:" prop="sendClientPhone">
+                <el-input v-model="form.sendClientPhone" placeholder="请输入发货方电话" clearable></el-input>
+              </el-form-item>
                 <el-form-item label="开单日期:" prop="createTime">
                   <el-date-picker
                     style="width: 445px;"
@@ -111,7 +114,7 @@
 
 <script>
 import SettlementForCustomersAjax from '@/api/SettlementForCustomers/SettlementForCustomers'
-
+import ShiftPlanAjax from '@/api/ShiftPlan/ShiftPlan'
 import VPagination from '@/components/Pagination/Pagination'
 import { mapGetters } from 'vuex'
 export default {
@@ -124,7 +127,8 @@ export default {
         clientName: '', // 客户名称
         sendClient: '', // 客户名称
         createTimeStart: '', // 开始时间
-        createTimeEnd: '' // 截止时间
+        createTimeEnd: '', // 截止时间
+        sendClientPhone: ''
       },
       paginationParams: {pageSize: 10, total: 0, pageNum: 1},
       clickSearch: false,
@@ -144,10 +148,18 @@ export default {
   methods: {
     init () {
       this.queryList()
+      this.queryLineNameList()
       // this.GetClientData()
     },
     check (row) {
       this.$router.push({name: 'UnSettlementForCustomersList', query: {title: row.sendClientName, sendClient: row.sendClient, searchDate: this.form.createTime}})
+    },
+    queryLineNameList (val) { // 线路列表
+      ShiftPlanAjax.queryLineNameList(val).then(res => {
+        if (res.code === 200) {
+          this.lineNameOptions = res.data
+        }
+      })
     },
     queryList (type) {
       let queryParam = Object.assign({}, this.form)

@@ -772,43 +772,29 @@ export default {
       })
     },
     validatePhone (data) {
-      if (!data) {
-        // LoginAjax.ValidateUserName({account: this.form.account, accountId: this.form.accountId}).then(response => {
-        // LoginAjax.ValidateUserName({accountId: this.form.accountId}).then(response => {
-        //   if (response.code === 200 && !response.data) {
-        //     console.log(this.form, '123')
-        //     if (this.form.onlinePaySwitch) {
-        //       this.form.onlinePaySwitch = 0
-        //     } else {
-        //       this.form.onlinePaySwitch = 1
-        //     }
-        //     let id = this.$route.query.id
-        //     if (id !== '' && id !== undefined) { // 修改
-        //       this.form.clientId = id
-        //       let obj = {}
-        //       obj = Object.assign(this.updateObj, this.form)
-        //       this.updateClientManage(obj)
-        //     } else { // 新增
-        //       this.insertClientManage(this.form)
-        //     }
-        //   } else {
-        //     this.hasUserName = true
-        //     this.$refs.form.validate()
-        //   }
-        // })
-        let id = this.$route.query.id
-        if (id !== '' && id !== undefined) { // 修改
-          this.form.clientId = id
-          let obj = {}
-          obj = Object.assign(this.updateObj, this.form)
-          this.updateClientManage(obj)
-        } else { // 新增
-          this.insertClientManage(this.form)
-        }
-      } else {
-        this.hasPhone = true
-        this.$refs.form.validate()
+      let id = this.$route.query.id
+      if (id !== '' && id !== undefined) { // 修改
+        this.form.clientId = id
+        let obj = {}
+        obj = Object.assign(this.updateObj, this.form)
+        this.updateClientManage(obj)
+      } else { // 新增
+        this.insertClientManage(this.form)
       }
+      // if (!data) {
+      //   let id = this.$route.query.id
+      //   if (id !== '' && id !== undefined) { // 修改
+      //     this.form.clientId = id
+      //     let obj = {}
+      //     obj = Object.assign(this.updateObj, this.form)
+      //     this.updateClientManage(obj)
+      //   } else { // 新增
+      //     this.insertClientManage(this.form)
+      //   }
+      // } else {
+      //   this.hasPhone = true
+      //   this.$refs.form.validate()
+      // }
     },
     goBack () {
       this.$router.push({name: 'CustomerManage'})

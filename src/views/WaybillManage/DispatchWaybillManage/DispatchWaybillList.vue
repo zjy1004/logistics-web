@@ -67,6 +67,12 @@
                   </el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item label="收货站点:" prop="receiveClientStation">
+                <el-input v-model="form.receiveClientStation" placeholder="请输入收货站点" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="收货方电话:" prop="receivePhone">
+                <el-input v-model="form.receivePhone" placeholder="请输入收货方电话" clearable></el-input>
+              </el-form-item>
             </el-form>
           </div>
           <div class="search-btn-con">
@@ -112,7 +118,7 @@
                 label="收货方">
               </el-table-column>
               <el-table-column
-                min-width="15%"
+                min-width="10%"
                 prop="lineName"
                 label="线路">
               </el-table-column>
@@ -127,9 +133,14 @@
                 label="运输状态">
               </el-table-column>
               <el-table-column
+                min-width="10%"
+                prop="receiveClientStation"
+                label="收货站点">
+              </el-table-column>
+              <el-table-column
                 fixed="right"
                 label="操作"
-                width="70">
+                width="80">
                 <template slot-scope="scope">
                   <a class="check" href="javascript:;" type="text" size="small" @click="queryDetail(scope.row)">查看</a>
                 </template>
@@ -155,6 +166,7 @@
 
 <script>
 import DispatchWaybillManageAjax from '@/api/DispatchWaybillManage/DispatchWaybillManage'
+import WaybillApiAjax from '@/api/WaybillManage/WaybillApi'
 import RouteAjax from '@/api/RouteManage/RouteManage'
 import VPagination from '@/components/Pagination/Pagination'
 import SearchByName from '@/components/SearchByName/SearchByName'
@@ -176,8 +188,11 @@ export default {
         receiveClientName: '', // 收货方
         pkLine: '', // 线路id
         waybillDeliveryType: '', // 配送类型
-        waybillStatus: '' // 运单状态
+        waybillStatus: '', // 运单状态
+        receiveClientStation: '',
+        receivePhone: ''
       },
+      stationOptions: [],
       tableData: [],
       multipleSelection: []
     }
@@ -189,11 +204,19 @@ export default {
     init () {
       this.queryLineOptions()
       this.queryList()
+      this.getStationList()
     },
     queryLineOptions () {
       RouteAjax.QueryLines({lineType: 6}).then(res => {
         if (res.code === 200) {
           this.lineOptions = res.data
+        }
+      })
+    },
+    getStationList () { // 物流公司下站点列表
+      WaybillApiAjax.getStationList().then(res => {
+        if (res.code === 200) {
+          this.stationOptions = res.data
         }
       })
     },
